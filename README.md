@@ -1,0 +1,4 @@
+Bloodbath
+=========
+
+A SurvivalGames plugin.
