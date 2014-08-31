@@ -1,0 +1,11 @@
+name: Bloodbath
+version: 1.0
+main: me.pogostick29dev.bloodbath.Main
+author: PogoStick29Dev
+description: A SurvivalGames plugin.
+depend: [WorldEdit]
+
+commands:
+  bloodbath:
+    usage: /<command> <args> [optional args]
+    description: Bloodbath command.
