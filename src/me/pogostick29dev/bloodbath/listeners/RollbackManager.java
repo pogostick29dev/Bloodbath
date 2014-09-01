@@ -19,7 +19,7 @@ public class RollbackManager implements Listener {
 	
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent e) {
-		handle(e.getBlock().getState(), e.getPlayer());
+		handle(e.getBlockReplacedState(), e.getPlayer());
 	}
 	
 	@EventHandler
