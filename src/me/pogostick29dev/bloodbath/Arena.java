@@ -5,6 +5,8 @@ import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -158,7 +160,13 @@ public class Arena {
 			else {
 				Bukkit.getServer().broadcastMessage("Arena " + id + " has ended.");
 			}
-			
+
+            for(Entity e : Bukkit.getWorld(this.getBounds().getWorld().getName()).getEntities()){
+                if(this.getBounds().contains(e.getLocation()) && e.getType() == EntityType.DROPPED_ITEM){
+                    e.remove();
+                }
+            }
+
 			players.clear();
 			rollback();
 			state = ArenaState.WAITING;
@@ -179,10 +187,11 @@ public class Arena {
 	
 	private void rollback() {
 		for (BlockState state : changedBlocks) {
-			state.update(true, false);
+			state.update(true);
 		}
-		
+
 		changedBlocks.clear();
+
  	}
 	
 	public void start() {

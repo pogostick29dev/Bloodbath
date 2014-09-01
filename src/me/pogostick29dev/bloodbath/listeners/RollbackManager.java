@@ -26,8 +26,9 @@ public class RollbackManager implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            handle(e.getBlock().getState(), e.getPlayer());
+
         }
+        handle(e.getBlock().getState(), e.getPlayer());
 	}
 	
 	@EventHandler
@@ -42,8 +43,8 @@ public class RollbackManager implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            handle(e.getBlockReplacedState(), e.getPlayer());
         }
+        handle(e.getBlockReplacedState(), e.getPlayer());
 	}
 	
 	@EventHandler
