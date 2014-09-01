@@ -27,7 +27,9 @@ public class Arena {
 	
 	private ArrayList<Player> players;
 	private ArrayList<BlockState> changedBlocks;
-	
+
+    private ItemStack kitSelector;
+
 	protected Arena(String id) {
 		this.id = id;
 		
@@ -120,7 +122,7 @@ public class Arena {
 		
 		p.getInventory().clear();
 		
-		ItemStack kitSelector = new ItemStack(Material.COMPASS, 1);
+		kitSelector = new ItemStack(Material.COMPASS, 1);
 		ItemMeta meta = kitSelector.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "Kit Selector");
 		meta.setLore(Arrays.asList("Right click this", "to choose", "your kit."));
@@ -187,6 +189,9 @@ public class Arena {
 		this.state = ArenaState.STARTED;
 		
 		for (Player p : players) {
+            if (p.getInventory().contains(kitSelector)){
+
+            }
 			p.setHealth(20.0D);
 			p.setGameMode(GameMode.SURVIVAL);
 		}
