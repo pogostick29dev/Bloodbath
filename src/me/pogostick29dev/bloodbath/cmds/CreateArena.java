@@ -34,7 +34,8 @@ public class CreateArena extends GameCommand {
 		Main.saveLocation(s.getMaximumPoint(), SettingsManager.getArenas().createSection(name + ".cornerB"));
 		
 		SettingsManager.getArenas().save();
-		
+
+        ArenaManager.getInstance().setup();
 		p.sendMessage(ChatColor.GREEN + "Created arena " + name + ". Now you must set up the spawns.");
 	}
 }
