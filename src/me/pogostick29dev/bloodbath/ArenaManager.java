@@ -1,5 +1,6 @@
 package me.pogostick29dev.bloodbath;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class ArenaManager {
 		
 		return null;
 	}
-	
+
+
 	public ArrayList<Arena> getArenas() {
 		return arenas;
 	}

@@ -199,4 +199,13 @@ public class Arena {
 			chest.fillChest();
 		}
 	}
+
+    public Location getSpawn(Player p){
+        for (Spawn s : spawns){
+            if (s.getPlayer() == p){
+                return s.getLocation();
+            }
+        }
+        return null;
+    }
 }

@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(rollbackManager = new RollbackManager(), this);
 		pm.registerEvents(new SignManager(), this);
+
 	}
 
 	public static Plugin getPlugin() {
