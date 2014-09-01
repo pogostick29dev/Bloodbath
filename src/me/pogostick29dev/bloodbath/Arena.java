@@ -130,7 +130,8 @@ public class Arena {
 		meta.setLore(Arrays.asList("Right click this", "to choose", "your kit."));
 		kitSelector.setItemMeta(meta);
 		p.getInventory().addItem(kitSelector);
-		
+		p.updateInventory();
+
 		p.sendMessage(ChatColor.GREEN + "You have joined arena " + id + ".");
 		
 		if (players.size() >= spawns.size() && state == ArenaState.WAITING) {
@@ -199,7 +200,14 @@ public class Arena {
 		
 		for (Player p : players) {
             if (p.getInventory().contains(kitSelector)){
+                // If player didn't select a kit, give the player the default "Archer" kit
+                Kit kit = KitManager.getInstance().getKit("Archer");
 
+                p.getInventory().clear();
+
+                for (ItemStack item : kit.getItems()) {
+                    p.getInventory().addItem(item);
+                }
             }
 			p.setHealth(20.0D);
 			p.setGameMode(GameMode.SURVIVAL);
