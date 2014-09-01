@@ -18,7 +18,7 @@ public class ForceStart extends GameCommand {
     public void onCommand(Player p, String[] args) {
 
         if (args.length == 0) {
-            p.sendMessage(ChatColor.RED + "You must specify the arena to join.");
+            p.sendMessage(ChatColor.RED + "You must specify the arena to start.");
             return;
         }
 
