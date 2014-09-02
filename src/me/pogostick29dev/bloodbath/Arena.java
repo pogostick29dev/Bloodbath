@@ -10,9 +10,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Arena {
 	
@@ -183,16 +185,45 @@ public class Arena {
 	}
 	
 	public void addBlockState(BlockState state) {
-		changedBlocks.add(state);
+
+                    if (!changedBlocks.contains(state)) {
+                        changedBlocks.add(state);
+
+                    }
+
 	}
-	
-	private void rollback() {
-		for (BlockState state : changedBlocks) {
-			state.update(true);
-		}
 
-		changedBlocks.clear();
+    public void regen(final List<BlockState> blocks, final boolean effect, final long speed) {
 
+        new BukkitRunnable() {
+            int i = -1;
+            @SuppressWarnings("deprecation")
+            public void run() {
+                if (i != blocks.size() - 1) {
+                    i++;
+                    BlockState bs = changedBlocks.get(i);
+                    bs.update(true, false);
+                    if (effect)
+                        bs.getBlock().getWorld().playEffect(bs.getLocation(), Effect.STEP_SOUND, bs.getBlock().getType());
+                }else {
+
+                    blocks.clear();
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(Main.getPlugin(), speed, speed);
+    }
+
+	public void rollback() {
+
+		regen(changedBlocks, true, (long) 1);
+
+//        try {
+//            LocalWorld world = BukkitUtil.getLocalWorld(getBounds().getWorld());
+//            world.regenerate(getBounds().getRegionSelector().getRegion(), new EditSession(world, -1));
+//        }catch (Exception e){
+//            Bukkit.getServer().broadcastMessage(e.getLocalizedMessage());
+//        }
  	}
 	
 	public void start() {

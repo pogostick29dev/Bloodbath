@@ -35,7 +35,7 @@ public class KitSelection implements Listener {
 		if (!(e.getWhoClicked() instanceof Player)) {
 			return;
 		}
-		
+        if (e.getCurrentItem() == null && e.getCurrentItem().hasItemMeta() )return;
 		Player p = (Player) e.getWhoClicked();
 		
 		if (!e.getInventory().getName().equals(ChatColor.GOLD + "Kit Selector")) {
@@ -44,7 +44,7 @@ public class KitSelection implements Listener {
 		
 		e.setCancelled(true);
 		e.getWhoClicked().closeInventory();
-		
+
 		Kit kit = KitManager.getInstance().getKit(e.getCurrentItem().getItemMeta().getDisplayName());
 		
 		p.getInventory().clear();

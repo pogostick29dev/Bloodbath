@@ -34,7 +34,7 @@ public class AddSpawn extends GameCommand {
 			SettingsManager.getArenas().createSection(a.getID() + ".spawns");
 		}
 
-        Location roundedLocation = new Location(p.getLocation().getWorld(), Math.round(p.getLocation().getX()), Math.round(p.getLocation().getY()), Math.round(p.getLocation().getZ()));
+        Location roundedLocation = new Location(p.getLocation().getWorld(), Math.round(p.getLocation().getX()) + 0.5, Math.round(p.getLocation().getY()), Math.round(p.getLocation().getZ()) + 0.5);
 		Main.saveLocation(roundedLocation, SettingsManager.getArenas().createSection(a.getID() + ".spawns" + "." + SettingsManager.getArenas().<ConfigurationSection>get(a.getID() + ".spawns").getKeys(false).size()));
 		SettingsManager.getArenas().save();
 		
