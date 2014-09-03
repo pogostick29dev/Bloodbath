@@ -1,5 +1,6 @@
 package me.pogostick29dev.bloodbath;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,11 +30,13 @@ public class LobbySign {
 	}
 	
 	public void update() {
-		sign.setLine(0, "[SurvivalGames]");
+        String s = "[" + ChatColor.RED + "BloodBath" + ChatColor.RESET+ "]";
+		sign.setLine(0, s);
 		sign.setLine(1, arena.getID());
-		sign.setLine(2, arena.getState().toString());
-		sign.setLine(3, arena.getPlayers().length + "/" + arena.getMaxPlayers());
-		sign.update();
+        sign.setLine(2, arena.getState().toString().toLowerCase().substring(0, 1).toUpperCase() + arena.getState().toString().toLowerCase().substring(1));
+        if (arena.getPlayers().length != arena.getMaxPlayers()) sign.setLine(3, ChatColor.GREEN + "" + arena.getPlayers().length + "/" + arena.getMaxPlayers());
+		else sign.setLine(3, ChatColor.RED + "" + arena.getPlayers().length + "/" + arena.getMaxPlayers());
+        sign.update();
 	}
 	
 	public void save(ConfigurationSection section) {

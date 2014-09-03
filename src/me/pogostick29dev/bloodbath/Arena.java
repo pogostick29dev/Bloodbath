@@ -5,12 +5,16 @@ import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Arena {
 	
@@ -27,7 +31,9 @@ public class Arena {
 	
 	private ArrayList<Player> players;
 	private ArrayList<BlockState> changedBlocks;
-	
+
+    private ItemStack kitSelector;
+
 	protected Arena(String id) {
 		this.id = id;
 		
@@ -120,13 +126,14 @@ public class Arena {
 		
 		p.getInventory().clear();
 		
-		ItemStack kitSelector = new ItemStack(Material.COMPASS, 1);
+		kitSelector = new ItemStack(Material.COMPASS, 1);
 		ItemMeta meta = kitSelector.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "Kit Selector");
 		meta.setLore(Arrays.asList("Right click this", "to choose", "your kit."));
 		kitSelector.setItemMeta(meta);
 		p.getInventory().addItem(kitSelector);
-		
+		p.updateInventory();
+
 		p.sendMessage(ChatColor.GREEN + "You have joined arena " + id + ".");
 		
 		if (players.size() >= spawns.size() && state == ArenaState.WAITING) {
@@ -156,7 +163,13 @@ public class Arena {
 			else {
 				Bukkit.getServer().broadcastMessage("Arena " + id + " has ended.");
 			}
-			
+
+            for(Entity e : Bukkit.getWorld(this.getBounds().getWorld().getName()).getEntities()){
+                if(this.getBounds().contains(e.getLocation()) && e.getType() == EntityType.DROPPED_ITEM){
+                    e.remove();
+                }
+            }
+
 			players.clear();
 			rollback();
 			state = ArenaState.WAITING;
@@ -172,21 +185,61 @@ public class Arena {
 	}
 	
 	public void addBlockState(BlockState state) {
-		changedBlocks.add(state);
+
+                    if (!changedBlocks.contains(state)) {
+                        changedBlocks.add(state);
+
+                    }
+
 	}
-	
-	private void rollback() {
-		for (BlockState state : changedBlocks) {
-			state.update(true, false);
-		}
-		
-		changedBlocks.clear();
+
+    public void regen(final List<BlockState> blocks, final boolean effect, final long speed) {
+
+        new BukkitRunnable() {
+            int i = -1;
+            @SuppressWarnings("deprecation")
+            public void run() {
+                if (i != blocks.size() - 1) {
+                    i++;
+                    BlockState bs = changedBlocks.get(i);
+                    bs.update(true, false);
+                    if (effect)
+                        bs.getBlock().getWorld().playEffect(bs.getLocation(), Effect.STEP_SOUND, bs.getBlock().getType());
+                }else {
+
+                    blocks.clear();
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(Main.getPlugin(), speed, speed);
+    }
+
+	public void rollback() {
+
+		regen(changedBlocks, true, (long) 1);
+
+//        try {
+//            LocalWorld world = BukkitUtil.getLocalWorld(getBounds().getWorld());
+//            world.regenerate(getBounds().getRegionSelector().getRegion(), new EditSession(world, -1));
+//        }catch (Exception e){
+//            Bukkit.getServer().broadcastMessage(e.getLocalizedMessage());
+//        }
  	}
 	
 	public void start() {
 		this.state = ArenaState.STARTED;
 		
 		for (Player p : players) {
+            if (p.getInventory().contains(kitSelector)){
+                // If player didn't select a kit, give the player the default "Archer" kit
+                Kit kit = KitManager.getInstance().getKit("Archer");
+
+                p.getInventory().clear();
+
+                for (ItemStack item : kit.getItems()) {
+                    p.getInventory().addItem(item);
+                }
+            }
 			p.setHealth(20.0D);
 			p.setGameMode(GameMode.SURVIVAL);
 		}
@@ -199,4 +252,13 @@ public class Arena {
 			chest.fillChest();
 		}
 	}
+
+    public Location getSpawn(Player p){
+        for (Spawn s : spawns){
+            if (s.getPlayer() == p){
+                return s.getLocation();
+            }
+        }
+        return null;
+    }
 }

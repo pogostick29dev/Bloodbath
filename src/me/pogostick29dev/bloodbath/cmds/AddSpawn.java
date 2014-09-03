@@ -2,6 +2,7 @@ package me.pogostick29dev.bloodbath.cmds;
 
 import me.pogostick29dev.bloodbath.*;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -32,10 +33,12 @@ public class AddSpawn extends GameCommand {
 		if (!SettingsManager.getArenas().contains(a.getID() + ".spawns")) {
 			SettingsManager.getArenas().createSection(a.getID() + ".spawns");
 		}
-		
-		Main.saveLocation(p.getLocation(), SettingsManager.getArenas().createSection(a.getID() + ".spawns" + "." + SettingsManager.getArenas().<ConfigurationSection>get(a.getID() + ".spawns").getKeys(false).size()));
+
+        Location roundedLocation = new Location(p.getLocation().getWorld(), Math.round(p.getLocation().getX()) + 0.5, Math.round(p.getLocation().getY()), Math.round(p.getLocation().getZ()) + 0.5);
+		Main.saveLocation(roundedLocation, SettingsManager.getArenas().createSection(a.getID() + ".spawns" + "." + SettingsManager.getArenas().<ConfigurationSection>get(a.getID() + ".spawns").getKeys(false).size()));
 		SettingsManager.getArenas().save();
 		
 		p.sendMessage(ChatColor.GREEN + "Added spawn.");
 	}
+
 }

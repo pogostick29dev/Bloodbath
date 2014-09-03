@@ -21,10 +21,15 @@ public class PlayerMove implements Listener {
 			return;
 		}
 		
-		if (e.getTo().getX() == e.getFrom().getX() && e.getTo().getZ() == e.getFrom().getZ()) { // Ignore y so they can jump.
-			return; // Remove this if statement if you don't want to allow looking around.
-		}
-		
-		e.getPlayer().teleport(e.getFrom().getBlock().getLocation());
+//		if (Math.abs(e.getTo().getBlockX() - a.getSpawn(e.getPlayer()).getBlockX()) < 0.2 && Math.abs(e.getTo().getBlockZ() - a.getSpawn(e.getPlayer()).getBlockZ()) < 0.2) { // Ignore y so they can jump.
+//			return; // Remove this if statement if you don't want to allow looking around.
+//		}
+//
+//        Location newLocation = new Location(e.getFrom().getWorld(), e.getFrom().getBlockX(), e.getFrom().getBlockY(), e.getFrom().getBlockZ(), e.getPlayer().getLocation().getPitch(), e.getPlayer().getLocation().getYaw());
+//		e.setCancelled(true);
+        if (e.getTo().getX() == e.getFrom().getX() && e.getTo().getZ() == e.getFrom().getZ()) { // Ignore y so they can jump.
+            return; // Remove this if statement if you don't want to allow looking around.
+        }
+        e.setTo(e.getFrom());
 	}
 }

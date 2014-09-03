@@ -10,9 +10,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
-	
+
 	private static RollbackManager rollbackManager;
-	
+
 	public void onEnable() {
 		ArenaManager.getInstance().setup();
 		
@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(rollbackManager = new RollbackManager(), this);
 		pm.registerEvents(new SignManager(), this);
+
 	}
 
 	public static Plugin getPlugin() {
@@ -35,11 +36,7 @@ public class Main extends JavaPlugin {
 	public static WorldEditPlugin getWorldEdit() {
 		return (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 	}
-	
-	public static RollbackManager getRollbackManager() {
-		return rollbackManager;
-	}
-	
+
 	public static void saveLocation(Location location, ConfigurationSection section) {
 		section.set("world", location.getWorld().getName());
 		section.set("x", location.getX());
