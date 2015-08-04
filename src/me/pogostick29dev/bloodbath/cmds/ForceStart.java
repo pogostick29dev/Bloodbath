@@ -29,6 +29,11 @@ public class ForceStart extends GameCommand {
             return;
         }
 
+        if(a.getState() == ArenaState.STARTED) {
+        	p.sendMessage(ChatColor.RED + "Arena already started!");
+        	return;
+        }
+
         a.start();
     }
 }
